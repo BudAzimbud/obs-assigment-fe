@@ -1,3 +1,4 @@
+```javascript
 project-root/
 │
 ├── src/
@@ -15,7 +16,7 @@ project-root/
 │   ├── reportWebVitals.js        # File for reporting web vitals (if using CRA)
 │   └── setupTests.js             # Configuration/setup for testing (if using CRA)
 │
-└── other-project-files/ 
+└── other-project-files/ ```
 
 # Getting Started with Create React App
 
