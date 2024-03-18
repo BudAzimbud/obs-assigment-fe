@@ -47,7 +47,7 @@ function ListUser({ editUser }) {
     {
       id: 'id',
       label: 'Action',
-      minWidth: 200,
+      minWidth: 180,
       align: 'center',
       format: (value) => (
         <div>
@@ -60,6 +60,7 @@ function ListUser({ editUser }) {
             <DeleteOutline />
           </ButtonIcon>
           <ButtonIcon
+            data-testid="edit-button"
             onClick={() => {
               editUser(value);
               const user = users.find((item) => item.id === value);

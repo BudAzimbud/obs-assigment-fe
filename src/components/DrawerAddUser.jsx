@@ -10,9 +10,10 @@ import { addUser } from '../redux/reducers/usersSlice';
 import { Autocomplete, Button, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import { PersonAdd } from '@mui/icons-material';
+import { Close, PersonAdd } from '@mui/icons-material';
 import { MuiTelInput } from 'mui-tel-input';
 import { useDebounce } from '../hooks/debounce';
+import ButtonIcon from './ButtonIcon';
 
 export default function DrawerAddUser({ toggleDrawer, open }) {
   const { register, handleSubmit, setValue, watch, reset } = useForm();
@@ -33,6 +34,7 @@ export default function DrawerAddUser({ toggleDrawer, open }) {
 
   const onSubmit = (data) => {
     const id = users[users.length - 1]?.id;
+    toggleDrawer(false);
     dispatch(
       addUser({
         data: {
@@ -43,7 +45,7 @@ export default function DrawerAddUser({ toggleDrawer, open }) {
           address: {
             street: data.street,
             suite: data.suite,
-            city: data.city.value,
+            city: data?.city?.value,
             zipcode: data.zipcode,
             geo: {
               lat: '-43.9509',
@@ -60,7 +62,6 @@ export default function DrawerAddUser({ toggleDrawer, open }) {
         }
       })
     );
-    toggleDrawer(false);
     reset();
   };
 
@@ -70,12 +71,20 @@ export default function DrawerAddUser({ toggleDrawer, open }) {
   };
   return (
     <div>
-      <Drawer anchor="right" open={open} onClose={closed}>
+      <Drawer data-testid="drawer-add" anchor="right" open={open} onClose={closed}>
         <Box sx={{ width: 370, padding: 2 }} role="presentation">
-          <Typography variant="h5">
-            <PersonAdd color="primary" size={30} />
-          </Typography>
-          <form style={{ display: 'grid', gap: 15 }} onSubmit={handleSubmit(onSubmit)}>
+          <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="h5">
+              <PersonAdd color="primary" size={30} />
+            </Typography>
+            <ButtonIcon onClick={closed}>
+              <Close />
+            </ButtonIcon>
+          </Box>
+          <form
+            data-testid="save"
+            style={{ display: 'grid', gap: 15 }}
+            onSubmit={handleSubmit(onSubmit)}>
             <TextField size="medium" {...register('name')} label="Name" fullWidth required />
             <TextField
               size="medium"

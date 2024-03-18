@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import PropTypes from 'prop-types';
-import { Autocomplete, Avatar, Button, TextField } from '@mui/material';
+import { Autocomplete, Avatar, Button, TextField, Typography } from '@mui/material';
 import { MuiTelInput } from 'mui-tel-input';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { editUser } from '../redux/reducers/usersSlice';
 import { addCity } from '../redux/reducers/citiesSlice';
 import { useDebounce } from '../hooks/debounce';
+import { Close } from '@mui/icons-material';
+import ButtonIcon from './ButtonIcon';
 export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
   const { register, handleSubmit, setValue, watch, reset } = useForm();
   const closed = () => {
@@ -56,6 +58,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
   }, [cities]);
 
   const onSubmit = (data) => {
+    toggleDrawer(false);
     dispatch(
       editUser({
         data: {
@@ -83,7 +86,6 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
         }
       })
     );
-    toggleDrawer(false);
     reset();
   };
 
@@ -94,13 +96,23 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
 
   return (
     <div>
-      <Drawer anchor="right" open={open} onClose={closed}>
+      <Drawer data-testid="drawer-edit" anchor="right" open={open} onClose={closed}>
         <Box sx={{ width: 370, padding: 2 }} role="presentation">
           {!user ? (
             <div>loading</div>
           ) : (
-            <form style={{ display: 'grid', gap: 15 }} onSubmit={handleSubmit(onSubmit)}>
-              <Avatar src={'https://picsum.photos/id/237/200'} />
+            <form
+              data-testid="update"
+              style={{ display: 'grid', gap: 15 }}
+              onSubmit={handleSubmit(onSubmit)}>
+              <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="h5">
+                  <Avatar src={'https://picsum.photos/id/237/200'} />
+                </Typography>
+                <ButtonIcon onClick={closed}>
+                  <Close />
+                </ButtonIcon>
+              </Box>
               <TextField size="medium" {...register('name')} label="Name" fullWidth required />
               <TextField
                 size="medium"
