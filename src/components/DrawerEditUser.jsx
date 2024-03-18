@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import PropTypes from 'prop-types';
@@ -8,31 +8,34 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 // import { addCity } from '../redux/reducers/citiesSlice';
 import { editUser } from '../redux/reducers/usersSlice';
+import { addCity } from '../redux/reducers/citiesSlice';
+import { useDebounce } from '../hooks/debounce';
 export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
+  const { register, handleSubmit, setValue, watch, reset } = useForm();
   const closed = () => {
     if (open) {
       toggleDrawer(false);
+      reset();
     }
   };
-  const [, setCitySearch] = React.useState();
   const { cities } = useSelector((state) => state.cities);
   const { users } = useSelector((state) => state.users);
   const dispatch = useDispatch();
-  const { register, handleSubmit, setValue, watch, reset } = useForm();
+  const debounce = useDebounce();
   const handleChangePhone = (newValue) => {
     setValue('phone', newValue);
   };
-  const user = users.find((item) => item.id === idUser);
-
+  const user = useMemo(() => {
+    return users.find((item) => item.id === idUser);
+  }, [idUser, users]);
   React.useEffect(() => {
-    if (open && !watch('username')?.length) {
+    if (open) {
       reset({
         name: user.name,
         username: user.username,
         email: user.email,
         street: user?.address?.street,
         suite: user?.address?.suite,
-        city: { label: user?.address?.city, value: user?.address?.city },
         zipcode: user.address?.zipcode,
         geo: {
           lat: '-43.9509',
@@ -45,8 +48,12 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
         company_bs: user?.company?.bs
       });
     }
+  }, [open]);
+
+  useEffect(() => {
+    dispatch(addCity({ data: user?.address?.city }));
     setValue('city', { label: user?.address?.city, value: user?.address?.city });
-  }, [open, cities]);
+  }, [cities]);
 
   const onSubmit = (data) => {
     dispatch(
@@ -59,7 +66,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
           address: {
             street: data.street,
             suite: data.suite,
-            city: data.city.value,
+            city: data?.city?.value ? data?.city?.value : user?.address?.city,
             zipcode: data.zipcode,
             geo: {
               lat: '-43.9509',
@@ -77,12 +84,12 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
       })
     );
     toggleDrawer(false);
+    reset();
   };
 
-  const onAddCity = () => {
-    // const valueSearch = citySearch;
-    // dispatch(addCity({ data: valueSearch }));
-    // setValue('city', { label: valueSearch, value: valueSearch });
+  const onAddCity = (citySearch) => {
+    dispatch(addCity({ data: citySearch }));
+    setValue('city', { label: citySearch, value: citySearch });
   };
 
   return (
@@ -122,13 +129,25 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 id="combo-box-demo"
                 options={cities.map((data) => ({ label: data, value: data }))}
                 size="medium"
-                value={watch('city')}
-                onSelect={(e) => setValue('city', { label: e.target.value, value: e.target.value })}
-                onInputChange={(e) => setCitySearch(e?.target?.value)}
+                defaultValue={{ label: user.address.city, value: user.address.city }}
+                onChange={(e, v) => {
+                  setValue('city', v);
+                }}
                 fullWidth
                 required
-                noOptionsText={<Button onClick={onAddCity}>Sign City</Button>}
-                renderInput={(params) => <TextField {...params} label="City" fullWidth required />}
+                renderInput={(params) => (
+                  <TextField
+                    onChange={(e) => {
+                      debounce(() => {
+                        onAddCity(e?.target?.value);
+                      });
+                    }}
+                    {...params}
+                    label="City"
+                    fullWidth
+                    required
+                  />
+                )}
               />
               <TextField
                 size="medium"

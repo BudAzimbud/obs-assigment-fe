@@ -10,7 +10,12 @@ export const citiesSlice = createSlice({
   initialState,
   reducers: {
     addCity: (state, action) => {
-      state.cities.push(action.payload.data);
+      if (
+        action.payload.data &&
+        state.cities.find((item) => item === action.payload.data) === undefined
+      ) {
+        state.cities.push(action.payload.data);
+      }
     }
   }
 });

@@ -47,7 +47,8 @@ function ListUser({ editUser }) {
     {
       id: 'id',
       label: 'Action',
-      align: 'right',
+      minWidth: 200,
+      align: 'center',
       format: (value) => (
         <div>
           <ButtonIcon

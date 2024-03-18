@@ -26,7 +26,7 @@ function App() {
         onClick={() => setShowAddUser(true)}
         size={'large'}
         color="primary"
-        style={{ position: 'fixed', zIndex: 999, bottom: 40, right: 49 }}>
+        style={{ position: 'fixed', zIndex: 999, bottom: 40, right: 36 }}>
         <Add />
       </Fab>
     </Container>

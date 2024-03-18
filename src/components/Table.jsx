@@ -28,7 +28,7 @@ export default function TableData({ rows, columns }) {
         }}
         sx={{ width: '100%' }}>
         <Typography>Oops !!! Data is empty</Typography>
-        <Warning color="warning" size="large" />
+        <Warning color="warning" />
       </Paper>
     );
   }

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
@@ -12,28 +12,31 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import { PersonAdd } from '@mui/icons-material';
 import { MuiTelInput } from 'mui-tel-input';
+import { useDebounce } from '../hooks/debounce';
 
 export default function DrawerAddUser({ toggleDrawer, open }) {
+  const { register, handleSubmit, setValue, watch, reset } = useForm();
+
   const closed = () => {
     if (open) {
       toggleDrawer(false);
+      reset();
     }
   };
-  const [citySearch, setCitySearch] = React.useState();
+  const debounce = useDebounce();
   const { cities } = useSelector((state) => state.cities);
   const { users } = useSelector((state) => state.users);
   const dispatch = useDispatch();
-  const { register, handleSubmit, setValue, watch } = useForm();
   const handleChangePhone = (newValue) => {
     setValue('phone', newValue);
   };
 
   const onSubmit = (data) => {
-    const id = users[users.length - 1].id;
+    const id = users[users.length - 1]?.id;
     dispatch(
       addUser({
         data: {
-          id: id + 1,
+          id: id + 1 || 1,
           name: data.name,
           username: data.username,
           email: data.email,
@@ -58,12 +61,12 @@ export default function DrawerAddUser({ toggleDrawer, open }) {
       })
     );
     toggleDrawer(false);
+    reset();
   };
 
-  const onAddCity = () => {
+  const onAddCity = (citySearch) => {
     const valueSearch = citySearch;
     dispatch(addCity({ data: valueSearch }));
-    setValue('city', { label: valueSearch, value: valueSearch });
   };
   return (
     <div>
@@ -95,12 +98,17 @@ export default function DrawerAddUser({ toggleDrawer, open }) {
               id="combo-box-demo"
               options={cities.map((data) => ({ label: data, value: data }))}
               size="medium"
-              value={watch('city')}
-              onSelect={(e) => setValue('city', { label: e.target.value, value: e.target.value })}
-              onInputChange={(e) => setCitySearch(e.target.value)}
+              defaultValue={watch('city')}
+              onSelect={(e) =>
+                setValue('city', { label: e?.target?.value, value: e?.target?.value })
+              }
+              onInputChange={(e) => {
+                debounce(() => {
+                  onAddCity(e?.target?.value);
+                });
+              }}
               fullWidth
               required
-              noOptionsText={<Button onClick={onAddCity}>Add List Cities</Button>}
               renderInput={(params) => <TextField {...params} label="City" fullWidth required />}
             />
             <TextField
