@@ -63,6 +63,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
     dispatch(
       editUser({
         data: {
+          avatar: user?.avatar,
           id: user.id,
           name: data.name,
           username: data.username,
@@ -118,7 +119,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
               onSubmit={handleSubmit(onSubmit)}>
               <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="h5">
-                  <Avatar src={'https://picsum.photos/id/237/200'} />
+                  <Avatar src={user?.avatar} />
                 </Typography>
                 <ButtonIcon onClick={closed}>
                   <Close />

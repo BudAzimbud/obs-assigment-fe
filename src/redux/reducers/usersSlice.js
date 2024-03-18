@@ -7,7 +7,14 @@ const initialState = {
 
 export const getUsers = createAsyncThunk('users/get', async (query) => {
   const response = await getUsersApi(query);
-  return response.data;
+  const result = response.data.map((item) => {
+    const url = `https://picsum.photos/id/${Math.floor(Math.random() * 1000) + item.id}/1000`;
+    return {
+      ...item,
+      avatar: url
+    };
+  });
+  return result;
 });
 
 export const usersSlice = createSlice({
@@ -15,7 +22,10 @@ export const usersSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, action) => {
-      state.users.push(action.payload.data);
+      state.users.push({
+        ...action.payload.data,
+        avatar: `https://picsum.photos/id/${Math.floor(Math.random() * 1000) + action.payload.data.id}/1000`
+      });
     },
     editUser: (state, action) => {
       const findIndex = state.users.findIndex((item) => item.id === action.payload.data.id);

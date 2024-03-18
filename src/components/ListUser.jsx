@@ -7,7 +7,7 @@ import TableData from './Table';
 import { deleteUser, getUsers } from '../redux/reducers/usersSlice';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { DeleteOutline, Edit, People } from '@mui/icons-material';
 import { addCity } from '../redux/reducers/citiesSlice';
 
@@ -24,9 +24,9 @@ function ListUser({ editUser }) {
   const columns = [
     { id: 'id', label: 'ID', minWidth: 30 },
     {
-      id: 'id',
+      id: 'avatar',
       label: 'Avatar',
-      format: () => <Avatar alt="avatar-image" src="https://picsum.photos/id/237/200" />
+      type: 'image'
     },
     { id: 'name', label: 'Name', minWidth: 170 },
     { id: 'username', label: 'Username', minWidth: 100 },

@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import PropTypes from 'prop-types';
-import { Typography } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import { Warning } from '@mui/icons-material';
 /**
  * CLASS COMPONENTS: METHOD 2
@@ -55,6 +55,13 @@ export default function TableData({ rows, columns }) {
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                   {columns.map((column) => {
                     const value = row[column.id];
+                    if (column?.type === 'image') {
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          <Avatar alt="avatar" src={value} />
+                        </TableCell>
+                      );
+                    }
                     return (
                       <TableCell key={column.id} align={column.align}>
                         {column.format && typeof value === 'number' ? column.format(value) : value}
