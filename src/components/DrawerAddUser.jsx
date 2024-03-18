@@ -14,6 +14,7 @@ import { Close, PersonAdd } from '@mui/icons-material';
 import { MuiTelInput } from 'mui-tel-input';
 import { useDebounce } from '../hooks/debounce';
 import ButtonIcon from './ButtonIcon';
+import { toast } from 'react-toastify';
 
 export default function DrawerAddUser({ toggleDrawer, open }) {
   const { register, handleSubmit, setValue, watch, reset } = useForm();
@@ -62,6 +63,16 @@ export default function DrawerAddUser({ toggleDrawer, open }) {
         }
       })
     );
+    toast.success('Successfully create new user!', {
+      position: 'bottom-center',
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark'
+    });
     reset();
   };
 

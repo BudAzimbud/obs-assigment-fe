@@ -12,6 +12,7 @@ import { addCity } from '../redux/reducers/citiesSlice';
 import { useDebounce } from '../hooks/debounce';
 import { Close } from '@mui/icons-material';
 import ButtonIcon from './ButtonIcon';
+import { toast } from 'react-toastify';
 export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
   const { register, handleSubmit, setValue, watch, reset } = useForm();
   const closed = () => {
@@ -86,6 +87,16 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
         }
       })
     );
+    toast.success(`Successfully update user ${user.username}!`, {
+      position: 'bottom-center',
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark'
+    });
     reset();
   };
 
