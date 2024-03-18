@@ -121,7 +121,14 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 fullWidth
                 required
               />
-              <TextField size="medium" {...register('email')} label="email" fullWidth required />
+              <TextField
+                type="email"
+                size="medium"
+                {...register('email')}
+                label="email"
+                fullWidth
+                required
+              />
               <TextField
                 size="medium"
                 {...register('street')}
