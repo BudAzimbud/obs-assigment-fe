@@ -10,10 +10,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { editUser } from '../redux/reducers/usersSlice';
 import { addCity } from '../redux/reducers/citiesSlice';
 import { useDebounce } from '../hooks/debounce';
-import { Close } from '@mui/icons-material';
+import { Close, Edit } from '@mui/icons-material';
 import ButtonIcon from './ButtonIcon';
 import { toast } from 'react-toastify';
-export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
+export default function DrawerEditUser({
+  toggleDrawer,
+  open,
+  idUser,
+  formDisabled,
+  setFormDisabled
+}) {
   const { register, handleSubmit, setValue, watch, reset } = useForm();
   const closed = () => {
     if (open) {
@@ -121,17 +127,30 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 <Typography variant="h5">
                   <Avatar src={user?.avatar} />
                 </Typography>
+                {formDisabled ? (
+                  <ButtonIcon onClick={() => setFormDisabled(false)}>
+                    <Edit />
+                  </ButtonIcon>
+                ) : null}
                 <ButtonIcon onClick={closed}>
                   <Close />
                 </ButtonIcon>
               </Box>
-              <TextField size="medium" {...register('name')} label="Name" fullWidth required />
+              <TextField
+                size="medium"
+                {...register('name')}
+                label="Name"
+                fullWidth
+                required
+                disabled={formDisabled}
+              />
               <TextField
                 size="medium"
                 {...register('username')}
                 label="Username"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <TextField
                 type="email"
@@ -140,6 +159,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 label="email"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <TextField
                 size="medium"
@@ -147,6 +167,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 label="Address Street"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <TextField
                 size="medium"
@@ -154,6 +175,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 label="Apt Suite"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <Autocomplete
                 disablePortal
@@ -177,8 +199,10 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                     label="City"
                     fullWidth
                     required
+                    disabled={formDisabled}
                   />
                 )}
+                disabled={formDisabled}
               />
               <TextField
                 size="medium"
@@ -186,6 +210,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 label="Postal Code"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <MuiTelInput
                 onChange={handleChangePhone}
@@ -194,6 +219,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 label="Phone"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <TextField
                 size="medium"
@@ -201,6 +227,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 label="Website"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <TextField
                 size="medium"
@@ -208,6 +235,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 label="Company Name"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <TextField
                 size="medium"
@@ -215,6 +243,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 label="Company Catch Prase"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <TextField
                 size="medium"
@@ -222,6 +251,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
                 label="Company BS"
                 fullWidth
                 required
+                disabled={formDisabled}
               />
               <Button variant="contained" size="large" type="submit">
                 Save
@@ -237,5 +267,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
 DrawerEditUser.propTypes = {
   open: PropTypes.bool,
   toggleDrawer: PropTypes.func,
-  idUser: PropTypes.number
+  idUser: PropTypes.number,
+  formDisabled: PropTypes.bool,
+  setFormDisabled: PropTypes.func
 };

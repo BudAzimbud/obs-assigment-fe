@@ -8,10 +8,10 @@ import { deleteUser, getUsers } from '../redux/reducers/usersSlice';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Paper, Typography } from '@mui/material';
-import { DeleteOutline, Edit, People } from '@mui/icons-material';
+import { DeleteOutline, Edit, People, RemoveRedEye } from '@mui/icons-material';
 import { addCity } from '../redux/reducers/citiesSlice';
 
-function ListUser({ editUser }) {
+function ListUser({ editUser, viewUser }) {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.users);
   const { cities } = useSelector((state) => state.cities);
@@ -72,6 +72,19 @@ function ListUser({ editUser }) {
             variant="contained">
             <Edit />
           </ButtonIcon>
+          <ButtonIcon
+            data-testid="edit-button"
+            onClick={() => {
+              viewUser(value);
+              const user = users.find((item) => item.id === value);
+              if (cities.find((item) => item === user.address.city) === undefined) {
+                dispatch(addCity({ data: user.address.city }));
+              }
+            }}
+            color="primary"
+            variant="contained">
+            <RemoveRedEye />
+          </ButtonIcon>
         </div>
       )
     }
@@ -91,5 +104,6 @@ function ListUser({ editUser }) {
 export default ListUser;
 
 ListUser.propTypes = {
-  editUser: PropTypes.func
+  editUser: PropTypes.func,
+  viewUser: PropTypes.func
 };
