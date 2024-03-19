@@ -109,7 +109,7 @@ export default function DrawerEditUser({ toggleDrawer, open, idUser }) {
   return (
     <div>
       <Drawer data-testid="drawer-edit" anchor="right" open={open} onClose={closed}>
-        <Box sx={{ width: 370, padding: 2 }} role="presentation">
+        <Box sx={{ width: 320, padding: 2 }} role="presentation">
           {!user ? (
             <div>loading</div>
           ) : (

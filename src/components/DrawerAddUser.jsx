@@ -83,7 +83,7 @@ export default function DrawerAddUser({ toggleDrawer, open }) {
   return (
     <div>
       <Drawer data-testid="drawer-add" anchor="right" open={open} onClose={closed}>
-        <Box sx={{ width: 370, padding: 2 }} role="presentation">
+        <Box sx={{ width: 320, padding: 2 }} role="presentation">
           <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h5">
               <PersonAdd color="primary" size={30} />
